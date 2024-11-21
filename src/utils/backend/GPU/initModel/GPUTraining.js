@@ -557,7 +557,7 @@ export async function MatMul(
 			let gpuCommands = commandEncoder.finish();
 			device.queue.submit([gpuCommands]);
 		}
-	}
+	}// interation loop end
 
 	console.log('iteration complete');
 	return;

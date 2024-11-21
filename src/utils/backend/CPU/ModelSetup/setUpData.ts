@@ -27,8 +27,8 @@ const getCSV_classify = () => {
 			const dataArray = results.data.map((row: unknown) =>
 				Object.values(row as { [key: string]: string }).map((value: string, index: number) => (index == 0 ? Number(value) : Number(value)))
 			);
-
 			const data = new Data(dataArray, 2, 10000, 2, 2, computeGraphStore.batchSize);
+			console.log('results,dataarray and data', results.data, dataArray, data);
 			data.dataSetName = 'classify';
 			console.log('data is ready');
 			console.log(data.getInputData());
