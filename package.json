@@ -9,9 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^22.9.0",
+    "@types/papaparse": "^5.3.15",
+    "@types/ws": "^8.5.13",
     "papaparse": "^5.4.1",
     "pinia": "^2.2.4",
-    "vue": "^3.5.10"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "vue": "^3.5.10",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.8",

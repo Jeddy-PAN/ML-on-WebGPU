@@ -1,17 +1,8 @@
 <script setup>
-import { MatMul } from '/home/thierry/repos/neural_network_vue/neural_network/src/utils/backend/GPU/initModel/GPUTraining.js';
-import SetUpModel from './utils/backend/CPU/ModelSetup/setUpModel.ts';
-import FlowGraph from './components/FlowGraph.vue';
-import { getCSV_classify } from './utils/backend/CPU/ModelSetup/setUpData.ts';
-import { onMounted } from 'vue';
+	import StartButton from './components/StartButton.vue'
+	import DataProcessor from './components/DataProcessor.vue';
 
-// onMounted(() => {
-// 	console.log('mounted');
-// 	getCSV_classify();
-// });
 
-getCSV_classify();
-// MatMul();
 </script>
 
 <template>
@@ -22,6 +13,8 @@ getCSV_classify();
 		<a href="https://vuejs.org/" target="_blank">
 			<img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
 		</a>
+		<StartButton />
+		<DataProcessor />
 		<!-- <SetUpModel /> -->
 		<!-- <FlowGraph /> -->
 	</div>
