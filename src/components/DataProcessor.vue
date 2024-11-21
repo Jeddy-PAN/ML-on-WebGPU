@@ -64,7 +64,7 @@
 
   // 初始化客户端1
   const setupClient1 = () => {
-    client1 = createWebSocketClient(1);
+    client1 = createWebSocketClient();
     
     client1.onConnectedChange = (connected) => {
       client1Connected.value = connected;
@@ -89,7 +89,7 @@
 
   // 初始化客户端2
   const setupClient2 = () => {
-    client2 = createWebSocketClient(2);
+    client2 = createWebSocketClient();
     
     client2.onConnectedChange = (connected) => {
       client2Connected.value = connected;

@@ -1,11 +1,7 @@
-import { useComputeGraphStore } from "../store/computeGraphStore";
-import setUpModel from "../utils/backend/CPU/ModelSetup/setUpModel";
-import Data from "../utils/backend/CPU/tools/DataClass";
-import { handleMessageFromServer } from "./utils/handleMessageFromServer_Worker";
-
-export function createWebSocketClient() {
+import { handleMessageFromServer } from "./utils/handleMessageFromServer_Dao";
+export function createDataAccess() {
   // 原生websocket
-  const ws = new WebSocket('ws://localhost:8080?role=worker');
+  const ws = new WebSocket('ws://localhost:8080?role=dao');
 
   const client = {
     ws: ws,
@@ -16,7 +12,7 @@ export function createWebSocketClient() {
     onError: null,
 
     init(){
-      const computeGraphStore = useComputeGraphStore();
+      // const computeGraphStore = useComputeGraphStore();
       this.ws.onopen = () => {
         this.connected = true;
         this.onConnectedChange?.(true);
@@ -30,10 +26,8 @@ export function createWebSocketClient() {
       this.ws.onmessage = (event) => {
         const msg = JSON.parse(event.data);
         handleMessageFromServer(this.ws, msg);
-        // if (msg.type === 'data') {
-        //     // 处理数据并返回结果
-        //     // setUpModel(mag.data);
-        //     const data = new Data(msg.data, 2, 5000, 2, 2, computeGraphStore.batchSize);
+        // if (msg.type === 'getData') {
+        //     // const data = new Data(msg.data, 2, 5000, 2, 2, computeGraphStore.batchSize);
         //     data.dataSetName = 'classify';
         //     setUpModel(data);
         //     this.onDataReceived?.({
@@ -45,8 +39,6 @@ export function createWebSocketClient() {
         //         type: 'result',
         //         data: 1
         //     }));
-        // } else if (msg.type === 'finalResult') {
-        //     this.onFinalResult?.(msg.data);
         // }
       };
 
