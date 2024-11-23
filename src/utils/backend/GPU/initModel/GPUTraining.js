@@ -51,6 +51,7 @@ export async function MatMul(
 	GradientTape,
 	_iterations,
 	data,
+	clientID,
 	model,
 	forwardTape,
 	gradientTape,
@@ -429,13 +430,10 @@ export async function MatMul(
 			}
 
 			if (iteration >= framerate - 1) {
-				// await setPredVals(predVals);
-				// await setTrueVals(trueVals);
-				// await setAvgError(avgError);
-				// await setXVals(xVals);
 				// print out information
-				console.log('predVals', predVals);
-				console.log('trueVals', trueVals);
+				console.log('clientId', clientID, iteration);
+				// console.log('predVals', predVals);
+				// console.log('trueVals', trueVals);
 				console.log('avgError', avgError);
 				// console.log('xVals', xVals);
 				// console.log(data.getInputData());
@@ -501,8 +499,8 @@ export async function MatMul(
 			device.queue.submit([gpuCommands]);
 		}
 
+		// compute type3 - compute and add gradients
 		const numGrds = gradientTape.length / 2;
-
 		for (let i = 0; i < numGrds; i++) {
 			const currTensorId = gradientTape[2 * i];
 			const currChildId = gradientTape[2 * i + 1];

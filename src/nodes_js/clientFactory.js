@@ -1,11 +1,12 @@
 import { useComputeGraphStore } from "../store/computeGraphStore";
+import { useWebSocketStore } from "../store/webSocketStore";
 import setUpModel from "../utils/backend/CPU/ModelSetup/setUpModel";
 import Data from "../utils/backend/CPU/tools/DataClass";
 
 export function createWebSocketClient(clientId) {
   // 原生websocket
   const ws = new WebSocket('ws://localhost:8080');
-
+  const webSocketStore = useWebSocketStore();
   const client = {
     id: clientId,
     ws: ws,
@@ -34,7 +35,7 @@ export function createWebSocketClient(clientId) {
             // setUpModel(mag.data);
             const data = new Data(msg.data, 2, 5000, 2, 2, computeGraphStore.batchSize);
             data.dataSetName = 'classify';
-            setUpModel(data);
+            setUpModel(data, clientId);
             this.onDataReceived?.({
                 receivedData: msg.data,
                 processedResult: 10
@@ -60,11 +61,21 @@ export function createWebSocketClient(clientId) {
       }
     },
 
+    sendMessageToServer(type, data){
+      if(this.connected){
+        this.ws.send(JSON.stringify({
+          type: type,
+          data: data
+        }))
+      }
+    },
+
     close(){
       this.ws.close();
     }
   };
 
   client.init();
+  webSocketStore.setClients(clientId,client);
   return client;
 }

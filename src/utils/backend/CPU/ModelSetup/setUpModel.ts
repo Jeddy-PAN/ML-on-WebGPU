@@ -9,7 +9,7 @@ function toggleStopLearning() {
 	stopLearning.value = !stopLearning.value;
 }
 
-function setUpModel(data: Data) {
+function setUpModel(data: Data, clientID: Number) {
 	// #TODO Hardcode tensors
 	const tensors = [
 		{
@@ -567,6 +567,7 @@ function setUpModel(data: Data) {
 		f32GradientTape,
 		maxNumIterations,
 		data,
+		clientID,
 		model,
 		forwardTape,
 		gradientTape,
