@@ -129,7 +129,7 @@
 <style scoped>
   .data-processor {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0;
     padding: 20px;
   }
 
@@ -137,6 +137,7 @@
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
+    flex-flow: column;
   }
 
   .status-indicator {
