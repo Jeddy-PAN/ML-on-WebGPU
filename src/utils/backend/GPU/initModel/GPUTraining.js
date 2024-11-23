@@ -42,9 +42,7 @@ import { getxValues } from './testSet.js';
 import { getPredValues } from './testSet.js';
 import { getTrueValues } from './testSet.js';
 import { getErrorValue } from './testSet.js';
-// import Data from '../../CPU/tools/DataClass.js';
 
-// import Data from '../../CPU/tools/DataClass';
 
 export async function MatMul(
 	Offsets,

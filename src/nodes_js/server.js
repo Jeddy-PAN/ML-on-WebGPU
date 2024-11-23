@@ -5,8 +5,6 @@ const wss = new WebSocketServer({ port: 8080 });
 let clients = [];
 let results = [];
 
-const data = Array.from({length: 100}, (_, i) => i + 1);
-
 wss.on('connection', (ws) => {
   clients.push(ws);
   console.log('Server: New client connected. Total clients:', clients.length);
