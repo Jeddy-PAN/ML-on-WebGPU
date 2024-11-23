@@ -42,6 +42,8 @@ import { getxValues } from './testSet.js';
 import { getPredValues } from './testSet.js';
 import { getTrueValues } from './testSet.js';
 import { getErrorValue } from './testSet.js';
+import { useWebSocketStore } from '../../../../store/webSocketStore';
+import { useComputeGraphStore } from '../../../../store/computeGraphStore';
 
 
 export async function MatMul(
@@ -72,7 +74,8 @@ export async function MatMul(
 	// 	setBreakTraining;
 
 	//init data and other
-
+	const webSocketStore = useWebSocketStore();
+	const computeGraphStore = useComputeGraphStore();
 	console.log('webgpu starts');
 	console.log(model);
 
@@ -430,13 +433,13 @@ export async function MatMul(
 			}
 
 			if (iteration >= framerate - 1) {
+				// computeGraphStore.setXVals(xVals);
+				// computeGraphStore.setTrueVals(trueVals);
+				// computeGraphStore.setPredVals(predVals);
+				await webSocketStore.getWebSocket(clientID).sendMessageToServer('avgError', avgError);
 				// print out information
 				console.log('clientId', clientID, iteration);
-				// console.log('predVals', predVals);
-				// console.log('trueVals', trueVals);
 				console.log('avgError', avgError);
-				// console.log('xVals', xVals);
-				// console.log(data.getInputData());
 			}
 
 			predValues_all = [];

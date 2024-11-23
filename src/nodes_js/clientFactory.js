@@ -33,20 +33,22 @@ export function createWebSocketClient(clientId) {
         if (msg.type === 'data') {
             // 处理数据并返回结果
             // setUpModel(mag.data);
+            this.onDataReceived?.({
+              receivedData: msg.data,
+              // processedResult: 10
+            });
             const data = new Data(msg.data, 2, 5000, 2, 2, computeGraphStore.batchSize);
             data.dataSetName = 'classify';
-            setUpModel(data, clientId);
-            this.onDataReceived?.({
-                receivedData: msg.data,
-                processedResult: 10
-            });
-            
-            this.ws.send(JSON.stringify({
-                type: 'result',
-                data: 1
-            }));
+            setUpModel(data, clientId);         
+            // this.ws.send(JSON.stringify({
+            //     type: 'result',
+            //     data: 1
+            // }));
         } else if (msg.type === 'finalResult') {
             this.onFinalResult?.(msg.data);
+        } else if (msg.type === 'reducedError') {
+          computeGraphStore.setAvgError(msg.data);
+          console.log('reducedError', msg.data);
         }
       };
 

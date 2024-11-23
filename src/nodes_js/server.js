@@ -1,9 +1,10 @@
 import { WebSocketServer } from 'ws';
-import { handleDataSet_Server, handleArrayData } from './utils/handleDataSet_Server.js';
+import { handleDataSet_Server, reduceResult } from './utils/handleDataSet_Server.js';
 
 const wss = new WebSocketServer({ port: 8080 });
 let clients = [];
 let results = [];
+let arrayError = [];
 
 wss.on('connection', (ws) => {
   clients.push(ws);
@@ -12,7 +13,7 @@ wss.on('connection', (ws) => {
   // server received message
   ws.on('message', (message) => {
     const msg = JSON.parse(message);
-    if(msg.type === 'result'){
+    if(msg.type === 'result') {
       results.push(msg.data);
       console.log(`Server received result: ${msg.data}`);
 
@@ -33,11 +34,21 @@ wss.on('connection', (ws) => {
         // reset results
         results = [];
     }
-    }else if(msg.type === 'startProcess'){
+    }else if(msg.type === 'startProcess') {
       // send the data to clients
       handleDataSet_Server(clients);
       // handleArrayData(clients, data);   
-    }    
+    }else if(msg.type === 'avgError') {
+      arrayError.push(msg.data);
+      if(arrayError.length === 2){
+        const result = reduceResult(arrayError);
+        clients[0].send(JSON.stringify({
+          type: 'reducedError',
+          data: result
+        }))
+        arrayError = [];
+      }
+    }  
   });
 
 
