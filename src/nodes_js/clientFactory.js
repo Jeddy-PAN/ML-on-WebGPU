@@ -49,6 +49,8 @@ export function createWebSocketClient(clientId) {
         } else if (msg.type === 'reducedError') {
           computeGraphStore.setAvgError(msg.data);
           console.log('reducedError', msg.data);
+        } else if (msg.type === 'reducedGradient') {
+          console.log('reduceGranient', msg.data);
         }
       };
 

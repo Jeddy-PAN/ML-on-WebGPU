@@ -42,6 +42,7 @@ import { getxValues } from './testSet.js';
 import { getPredValues } from './testSet.js';
 import { getTrueValues } from './testSet.js';
 import { getErrorValue } from './testSet.js';
+import { getGradientValues } from './testSet.js';
 import { useWebSocketStore } from '../../../../store/webSocketStore';
 import { useComputeGraphStore } from '../../../../store/computeGraphStore';
 
@@ -530,6 +531,21 @@ export async function MatMul(
 			device.queue.submit([gpuCommands]);
 		}
 
+		// upload gradients
+		// commandEncoder = device.createCommandEncoder();
+		// commandEncoder.copyBufferToBuffer(gpuBufferFlatData, 0, gpuReadBuffer, 0, FlatData.byteLength);
+		// gpuCommands = commandEncoder.finish();
+		// device.queue.submit([gpuCommands]);
+
+		// await gpuReadBuffer.mapAsync(GPUMapMode.READ);
+		// const dataReadBuffer = new Float32Array(gpuReadBuffer.getMappedRange());
+		// const gradientValues = getGradientValues(dataReadBuffer, model, Offsets);
+		// const avgGradient = gradientValues.reduce((sum, gradient) => sum + gradient, 0) / gradientValues.length;
+
+		// await webSocketStore.getWebSocket(clientID).sendMessageToServer('gradient', avgGradient);
+		// gpuReadBuffer.unmap();
+		// console.log('gradient', avgGradient);
+		
 		// compute type 4 - update data
 		const numUpdates = backwardTape.length;
 		for (let i = 3; i < numUpdates; ++i) {

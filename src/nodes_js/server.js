@@ -5,6 +5,7 @@ const wss = new WebSocketServer({ port: 8080 });
 let clients = [];
 let results = [];
 let arrayError = [];
+let arrayGradient = [];
 
 wss.on('connection', (ws) => {
   clients.push(ws);
@@ -48,7 +49,17 @@ wss.on('connection', (ws) => {
         }))
         arrayError = [];
       }
-    }  
+    }else if(msg.type === 'gradient') {
+      arrayGradient.push(msg.data);
+      if(arrayGradient.length === 2){
+        const result = reduceResult(arrayGradient);
+        clients[0].send(JSON.stringify({
+          type: 'reducedGradient',
+          data: result
+        }))
+        arrayGradient = [];
+      }
+    } 
   });
 
 
