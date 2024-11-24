@@ -33,7 +33,7 @@ const getCSV_classify = () => {
 			console.log('data is ready');
 			console.log(data.getInputData());
 
-			// setUpModel(data);
+			setUpModel(data, 1);
 		},
 	});
 };

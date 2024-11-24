@@ -434,13 +434,15 @@ export async function MatMul(
 			}
 
 			if (iteration >= framerate - 1) {
-				// computeGraphStore.setXVals(xVals);
-				// computeGraphStore.setTrueVals(trueVals);
-				// computeGraphStore.setPredVals(predVals);
+				await computeGraphStore.setXVals(xVals);
+				await computeGraphStore.setTrueVals(trueVals);
+				await computeGraphStore.setPredVals(predVals);
+				await computeGraphStore.setModelIterations(iteration);
 				await webSocketStore.getWebSocket(clientID).sendMessageToServer('avgError', avgError);
 				// print out information
-				console.log('clientId', clientID, iteration);
-				console.log('avgError', avgError);
+				// console.log('clientId', clientID, iteration);
+				// console.log('avgError', avgError);
+				console.log('vals:', clientID, xVals, predVals, trueVals);
 			}
 
 			predValues_all = [];

@@ -1,8 +1,11 @@
 <script setup>
 	import StartButton from './components/StartButton.vue'
 	import DataProcessor from './components/DataProcessor.vue';
+	import lossPlot from './components/d3/lossPlot.vue';
+	import classifyPlot from './components/d3/classifyPlot.vue';
+	import { ref } from 'vue';
 
-
+	const resetPlotFlag = ref(false);
 </script>
 
 <template>
@@ -19,7 +22,8 @@
 		<!-- <FlowGraph /> -->
 	</div>
 	<div style="width: 50%; float: right;">
-		<h1>www</h1>
+		<lossPlot :reset-flag="resetPlotFlag" @resetComplete="resetPlotFlag = false" />
+		<classifyPlot :reset-flag="resetPlotFlag" @classifyResetComplete="resetPlotFlag = false" />
 	</div>
 </template>
 <style scoped>
