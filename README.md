@@ -7,6 +7,7 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 ## Install packages
 
 npm install yarn --global yarn (no yarn)
+
 yarn install
 
 ## Start Server
