@@ -11,8 +11,10 @@ yarn install
 
 ## Start Server
 start one terminal:
+
 node src/nodes_js/server.js
 
 ## Start Project
 start another terminal:
+
 yarn dev
