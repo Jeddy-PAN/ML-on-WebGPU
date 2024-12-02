@@ -8,7 +8,7 @@ function splitDataSet(data, number){
   }
 
   if (number <= 0) {
-    return [dataset];
+    return [data];
   }
 
   // 如果划分数量大于数据集长度，则将length设置为数据集长度
@@ -24,7 +24,7 @@ function splitDataSet(data, number){
   for (let i = 0; i < number; i++) {
       const start = i * chunkSize;
       const end = Math.min(start + chunkSize, data.length);
-      if (start < dataset.length) {
+      if (start < data.length) {
         result.push(data.slice(start, end));
       }
   }

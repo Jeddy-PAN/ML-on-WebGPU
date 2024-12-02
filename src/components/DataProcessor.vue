@@ -65,7 +65,7 @@
   watch (
     () => clientID,
     (newID, oldID) => {
-      console.log('NodeID', newID);
+      console.log('NodeID', newID.value);
     },
     { immediate: true }
   )
