@@ -1,7 +1,9 @@
 import { readFileSync } from 'fs';
 
+// length of splited dataset
 let chunkSize = 0;
 
+// split the dataset
 function splitDataSet(data, number){
   if (!Array.isArray(data) || data.length === 0) {
     return [];
@@ -32,6 +34,7 @@ function splitDataSet(data, number){
   return result;
 }
 
+// get and handle the dataset
 function getDataSet(){
     console.log('getCSV called');
     const dataset = 'dataClass1.csv';
@@ -44,6 +47,7 @@ function getDataSet(){
     return data;
 }
 
+// main operation 
 export function handleDataSet_Server(num_clients) {
   // get dataset
   const source_data = getDataSet();
@@ -55,6 +59,7 @@ export function handleDataSet_Server(num_clients) {
 
 }
 
+// reduce the result 
 export function reduceResult(dataArray) {
   const total = chunkSize * 2;
   // const n = dataArray.length;

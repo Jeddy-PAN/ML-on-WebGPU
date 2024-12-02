@@ -48,20 +48,21 @@
   import { useWebSocketStore } from '../store/webSocketStore';
   import { storeToRefs } from 'pinia';
 
-  // 响应式状态
-  const client1Connected = ref(false);
-  const client2Connected = ref(false);
-  const finalResult = ref(null);
-  const clientResults = ref([]);
-  const logs = ref([]);
+  // Definition
+  const client1Connected = ref(false);  // connected status 1
+  const client2Connected = ref(false);  // connected status 2
+  const finalResult = ref(null);        // final result
+  const clientResults = ref([]);        // individual result from each client
+  const logs = ref([]);                 // logs
 
-  // 客户端实例
+  // instance of this client
   let client1 = null;
-  let client2 = null;
 
+  // pinia store
   const webSocketStore = useWebSocketStore();
   const { clientID, clientList } = storeToRefs(webSocketStore);
 
+  // listen the change of store
   watch (
     () => clientID,
     (newID, oldID) => {
@@ -76,7 +77,7 @@
       if(newList.value.size === 2){
         client1Connected.value = true;
         client2Connected.value = true;
-        console.log(newList.value);
+        console.log('clientList', newList.value);
       }
     },
     { 
@@ -84,12 +85,13 @@
       immediate: true
     }
   )
-  // 日志函数
+
+  // log function
   const addLog = (message) => {
     logs.value.push(`${new Date().toLocaleTimeString()}: ${message}`);
   };
 
-  // 初始化客户端1
+  // initialize this client
   const setupClient1 = () => {
     client1 = createWebSocketClient();
     
@@ -114,27 +116,7 @@
     };
   };
 
-  // 初始化客户端2
-  const setupClient2 = () => {
-    client2 = createWebSocketClient();
-    
-    client2.onConnectedChange = (connected) => {
-      client2Connected.value = connected;
-      addLog(`Client 2 ${connected ? 'connected' : 'disconnected'}`);
-    };
-
-    client2.onDataReceived = ({ receivedData, processedResult }) => {
-      addLog(`Client 2 received data chunk of ${receivedData.length} items`);
-      addLog(`Client 2 processed result: ${processedResult}`);
-      clientResults.value[1] = processedResult;
-    };
-
-    client2.onError = (error) => {
-      addLog(`Client 2 error: ${error.message}`);
-    };
-  };
-
-  // 开始处理数据
+  // inform the server to start training, request the dataset from server
   const startProcessing = () => {
     finalResult.value = null;
     clientResults.value = [];
@@ -143,18 +125,18 @@
   };
 
   onMounted(() => {
+    // if this client does not exist, create this client.
     if(!webSocketStore.getWS()){
       setupClient1();
     }
-    // setupClient2();
   });
 
   onBeforeUnmount(() => {
+    // close the client and delete it in the store
     if(client1){
       client1.close();
       webSocketStore.setWS(null);
     }
-    // client2?.close();
   });
 </script>
 

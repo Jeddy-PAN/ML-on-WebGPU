@@ -4,10 +4,14 @@ import setUpModel from "../utils/backend/CPU/ModelSetup/setUpModel";
 import Data from "../utils/backend/CPU/tools/DataClass";
 
 export function createWebSocketClient() {
-  // 原生websocket
+  // create the connection to the server
   const ws = new WebSocket('ws://localhost:8080');
+
+  // get pinia stores
   const webSocketStore = useWebSocketStore();
   const computeGraphStore = useComputeGraphStore();
+
+  // this client (one node in the distributed system)
   const client = {
     ws: ws,
     connected: false,
@@ -16,6 +20,7 @@ export function createWebSocketClient() {
     onFinalResult: null,
     onError: null,
 
+    // constructor
     init(){
       this.ws.onopen = () => {
         this.connected = true;
@@ -24,6 +29,7 @@ export function createWebSocketClient() {
 
       this.ws.onclose = () => {
         this.connected = false;
+        // clear ws store when closed
         webSocketStore.setClientID(null);
         webSocketStore.clientList.clear();
         this.onConnectedChange?.(false);
@@ -31,6 +37,7 @@ export function createWebSocketClient() {
 
       this.ws.onmessage = (event) => {
         const msg = JSON.parse(event.data);
+        // main operation
         this.operation(msg);
       };
 
@@ -41,12 +48,14 @@ export function createWebSocketClient() {
       };
     },
 
+    // send start signal to the server (start training)
     sendStartSignal(){
       if(this.connected){
         this.ws.send(JSON.stringify({ type: 'startProcess' }))
       }
     },
 
+    // send message to the server
     sendMessageToServer(type, data){
       if(this.connected){
         this.ws.send(JSON.stringify({
@@ -56,6 +65,7 @@ export function createWebSocketClient() {
       }
     },
 
+    // main operation when receiving message from the server
     operation(msg){
       if (msg.type === 'data') {
         // 处理数据并返回结果

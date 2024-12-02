@@ -1,16 +1,22 @@
 import { WebSocketServer } from 'ws';
 import { handleDataSet_Server, reduceResult } from './utils/handleDataSet_Server.js';
 
+// create the websocket server
 const wss = new WebSocketServer({ port: 8080 });
-const clients = new Map();
-let results = [];
-let arrayError = [];
-let arrayGradient = [];
 
+const clients = new Map();  // all connected clients 
+let results = [];           // all results from clients
+let arrayError = [];        // all errors from clients
+let arrayGradient = [];     // all gradients from clients
+
+// when one client connected to the server
 wss.on('connection', (ws) => {
+  // generate the unique ID of each client and send back the ID to the client
   const clientID = generateUniqueId();
   sendMessage(ws, 'register', clientID);
   console.log('connected: ', clientID);
+
+  // record this client into clients MAP
   clients.set(clientID, {
     id: clientID,
     ws: ws,
@@ -18,6 +24,7 @@ wss.on('connection', (ws) => {
   })
   console.log('Server: New client connected. Total clients:', clients.size);
 
+  // broadcast the clientList to all connected clients
   broadcastClientList();
   
   // server received message
@@ -25,7 +32,6 @@ wss.on('connection', (ws) => {
     const msg = JSON.parse(message);
     operation(msg);
   });
-
 
   ws.on('close', () => {
     clients.delete(clientID);
@@ -85,6 +91,7 @@ function sendSourceData(data){
 
 }
 
+// main operation according to the msg from clients
 function operation(msg){
   if(msg.type === 'result') {
     results.push(msg.data);

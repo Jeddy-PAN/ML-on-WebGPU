@@ -2,9 +2,9 @@ import { defineStore } from "pinia";
 
 export const useWebSocketStore = defineStore('webSocket', {
   state: () => ({
-    clientID: null,
-    ws: null,
-    clientList: new Map()
+    clientID: null,       // clientID of this client    
+    ws: null,             // instance of this client (clientFactory.js)
+    clientList: new Map() // get worker clientList (from server)
   }),
 
   actions: {
