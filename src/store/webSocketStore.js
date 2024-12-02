@@ -2,18 +2,29 @@ import { defineStore } from "pinia";
 
 export const useWebSocketStore = defineStore('webSocket', {
   state: () => ({
-    clients: new Map(),
+    clientID: null,
+    ws: null,
+    clientList: new Map()
   }),
 
   actions: {
-    setClients(clientID, client){
-      this.clients.set(clientID, client);
+    setClientID(clientID){
+      this.clientID = clientID;
     },
-    getWebSocket(clientID){
-      if(!this.clients.has(clientID)){
-        return null;
-      }
-      return this.clients.get(clientID);
+    getClientID(){
+      return this.clientID;
+    },
+    setClients(clientID, client){
+      this.clientList.set(clientID, client);
+    },
+    getClients(){
+      return this.clientList;
+    },
+    setWS(ws){
+      this.ws = ws;
+    },
+    getWS(){
+      return this.ws;
     }
   }
 

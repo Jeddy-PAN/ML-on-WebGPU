@@ -438,7 +438,7 @@ export async function MatMul(
 				await computeGraphStore.setTrueVals(trueVals);
 				await computeGraphStore.setPredVals(predVals);
 				await computeGraphStore.setModelIterations(iteration);
-				await webSocketStore.getWebSocket(clientID).sendMessageToServer('avgError', avgError);
+				await webSocketStore.getWS().sendMessageToServer('avgError', avgError);
 				// print out information
 				// console.log('clientId', clientID, iteration);
 				// console.log('avgError', avgError);

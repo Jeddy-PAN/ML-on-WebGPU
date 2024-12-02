@@ -43,8 +43,10 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue';
+  import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
   import { createWebSocketClient } from '../nodes_js/clientFactory';
+  import { useWebSocketStore } from '../store/webSocketStore';
+  import { storeToRefs } from 'pinia';
 
   // 响应式状态
   const client1Connected = ref(false);
@@ -57,6 +59,31 @@
   let client1 = null;
   let client2 = null;
 
+  const webSocketStore = useWebSocketStore();
+  const { clientID, clientList } = storeToRefs(webSocketStore);
+
+  watch (
+    () => clientID,
+    (newID, oldID) => {
+      console.log('NodeID', newID);
+    },
+    { immediate: true }
+  )
+
+  watch (
+    () => clientList,
+    (newList, oldList) => {
+      if(newList.value.size === 2){
+        client1Connected.value = true;
+        client2Connected.value = true;
+        console.log(newList.value);
+      }
+    },
+    { 
+      deep: true,
+      immediate: true
+    }
+  )
   // 日志函数
   const addLog = (message) => {
     logs.value.push(`${new Date().toLocaleTimeString()}: ${message}`);
@@ -64,16 +91,16 @@
 
   // 初始化客户端1
   const setupClient1 = () => {
-    client1 = createWebSocketClient(1);
+    client1 = createWebSocketClient();
     
     client1.onConnectedChange = (connected) => {
-      client1Connected.value = connected;
-      addLog(`Client 1 ${connected ? 'connected' : 'disconnected'}`);
+      // client1Connected.value = connected;
+      addLog(`Client ${connected ? 'connected' : 'disconnected'}`);
     };
 
     client1.onDataReceived = ({ receivedData, processedResult }) => {
-      addLog(`Client 1 received data chunk of ${receivedData.length} items`);
-      addLog(`Client 1 processed result: ${processedResult}`);
+      addLog(`Client received data chunk of ${receivedData.length} items`);
+      addLog(`Client processed result: ${processedResult}`);
       clientResults.value[0] = processedResult;
     };
 
@@ -83,13 +110,13 @@
     };
 
     client1.onError = (error) => {
-      addLog(`Client 1 error: ${error.message}`);
+      addLog(`Client error: ${error.message}`);
     };
   };
 
   // 初始化客户端2
   const setupClient2 = () => {
-    client2 = createWebSocketClient(2);
+    client2 = createWebSocketClient();
     
     client2.onConnectedChange = (connected) => {
       client2Connected.value = connected;
@@ -116,13 +143,18 @@
   };
 
   onMounted(() => {
-    setupClient1();
-    setupClient2();
+    if(!webSocketStore.getWS()){
+      setupClient1();
+    }
+    // setupClient2();
   });
 
-  onUnmounted(() => {
-    client1?.close();
-    client2?.close();
+  onBeforeUnmount(() => {
+    if(client1){
+      client1.close();
+      webSocketStore.setWS(null);
+    }
+    // client2?.close();
   });
 </script>
 
