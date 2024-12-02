@@ -16,6 +16,11 @@ start one terminal:
 node src/nodes_js/server.js
 
 ## Start Project
-start another terminal:
+start terminal2:
 
-yarn dev
+yarn dev  （host5173）
+
+
+start terminal3:
+
+yarn dev   (host5174)
